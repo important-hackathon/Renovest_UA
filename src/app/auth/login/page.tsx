@@ -58,7 +58,7 @@ export default function LoginPage() {
 
                 <div className="flex flex-col gap-6 items-center">
                     <div className="flex flex-col gap-2 w-1/2">
-                        <label className="text-black font-semibold text-sm text-center">Email</label>
+                        <label className="text-black text-center">Email</label>
                         <input
                             type="email"
                             placeholder="Type your email.."
@@ -69,7 +69,7 @@ export default function LoginPage() {
                         />
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
-                        <label className="text-black font-semibold text-sm text-center">Password</label>
+                        <label className="text-black text-center">Password</label>
                         <input
                             type="password"
                             placeholder="Type your password.."
