@@ -42,7 +42,7 @@ export default function LoginPage() {
             />
 
             {/* Building */}
-            <div className="absolute bottom-0 right-0 w-[300px] sm:w-[400px] md:w-[500px] z-10 pointer-events-none">
+            <div className="absolute bottom-0 right-40 w-[300px] sm:w-[300px] z-10 pointer-events-none">
                 <Image
                     src="/assets/images/building.svg"
                     alt="Building"
