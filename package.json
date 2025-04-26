@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.49.4",
+    "aos": "^2.3.4",
     "autoprefixer": "^10.4.21",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
@@ -19,10 +20,12 @@
     "react-dom": "^19.0.0",
     "react-fast-marquee": "^1.6.5",
     "react-paginate": "^8.3.0",
-    "swiper": "^11.2.6"
+    "swiper": "^11.2.6",
+    "react-router-dom": "^7.5.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/aos": "^3.0.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
