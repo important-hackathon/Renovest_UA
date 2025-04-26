@@ -1,66 +1,42 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import clsx from 'clsx';
 import { navigation } from '@/constants/navigation';
 
-export default function Header() {
+export default function BurgerMenu() {
     const pathname = usePathname();
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [visible, setVisible] = useState(false);
     const [animateIn, setAnimateIn] = useState(false);
 
     const isActive = (href: string) =>
         href === '/' ? pathname === '/' : pathname.startsWith(href);
 
     const openMenu = () => {
-        setMenuOpen(true);
+        setVisible(true);
         setTimeout(() => setAnimateIn(true), 10);
     };
 
     const closeMenu = () => {
         setAnimateIn(false);
-        setTimeout(() => setMenuOpen(false), 400);
+        setTimeout(() => setVisible(false), 400);
     };
 
     return (
-        <header className="fixed top-0 z-50 w-full bg-white shadow-md font-poppins">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-                {/* Logo / Brand */}
-                <Link href="/" className="text-2xl font-bold text-black">
-                    Renovest UA
-                </Link>
+        <>
+            {/* Open Burger Button */}
+            <button
+                onClick={openMenu}
+                aria-label="Open menu"
+                className="md:hidden text-black relative z-50"
+            >
+                <Menu className="w-7 h-7" />
+            </button>
 
-                {/* Desktop Navigation */}
-                <nav className="hidden md:flex gap-8">
-                    {navigation.map((item) => (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            className={clsx(
-                                'text-lg font-semibold text-black hover:text-gray-600 transition-colors',
-                                isActive(item.href) && 'underline underline-offset-4'
-                            )}
-                        >
-                            {item.name}
-                        </Link>
-                    ))}
-                </nav>
-
-                {/* Burger Button */}
-                <button
-                    onClick={openMenu}
-                    aria-label="Open menu"
-                    className="md:hidden text-black relative z-50"
-                >
-                    <Menu className="w-7 h-7" />
-                </button>
-            </div>
-
-            {/* Mobile Menu */}
-            {menuOpen && (
+            {visible && (
                 <div
                     className={clsx(
                         'fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center px-6 transition-all duration-400 ease-in-out',
@@ -69,7 +45,6 @@ export default function Header() {
                             : '-translate-y-full opacity-0 pointer-events-none'
                     )}
                 >
-                    {/* Close Button */}
                     <button
                         onClick={closeMenu}
                         aria-label="Close menu"
@@ -78,7 +53,6 @@ export default function Header() {
                         <X className="w-7 h-7" />
                     </button>
 
-                    {/* Mobile Navigation Links */}
                     <nav className="flex flex-col items-center gap-8 text-black text-xl font-semibold">
                         {navigation.map((item) => (
                             <Link
@@ -87,7 +61,7 @@ export default function Header() {
                                 onClick={closeMenu}
                                 className={clsx(
                                     'transition',
-                                    isActive(item.href) && 'underline underline-offset-4'
+                                    isActive(item.href) ? 'underline underline-offset-4' : ''
                                 )}
                             >
                                 {item.name}
@@ -96,6 +70,6 @@ export default function Header() {
                     </nav>
                 </div>
             )}
-        </header>
+        </>
     );
 }
