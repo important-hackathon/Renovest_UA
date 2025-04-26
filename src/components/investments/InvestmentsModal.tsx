@@ -35,7 +35,7 @@ export default function InvestmentModal({
       
       if (!user) {
         setError('You must be logged in to invest');
-        router.push('/auth');
+        router.push('/auth/login');
         return;
       }
 

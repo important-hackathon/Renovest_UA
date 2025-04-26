@@ -61,6 +61,11 @@ export default function DashboardPage() {
     fetchUserData();
   }, [supabase, router]);
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
+
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -190,6 +195,19 @@ export default function DashboardPage() {
             <h3 className="font-bold text-gray-900">{role === 'owner' ? 'View All Projects' : 'My Profile'}</h3>
             <p className="text-gray-500 text-sm mt-1">{role === 'owner' ? 'See available opportunities' : 'View and edit your profile'}</p>
           </Link>
+        </div>
+
+        {/* Sign Out Button */}
+        <div className="flex justify-center mt-12">
+          <button
+            onClick={handleSignOut}
+            className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-8 rounded-lg text-sm transition flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Sign Out
+          </button>
         </div>
 
         {/* Create Project Modal */}
