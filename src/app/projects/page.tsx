@@ -7,17 +7,15 @@ export default function ProjectsPage() {
         <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Explore Opportunities
         </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-10">
+        <p className="max-w-2xl mx-auto mb-10">
           Welcome to the heart of Renovest UA — the Projects Hub.
-          Here you can discover verified opportunities to make a real impact while building a strong investment portfolio.
+          Here you can discover verified opportunities to make a real impact while building a strong investment
+          portfolio.
         </p>
-        <div className="flex justify-center mb-14">
-          <div className="w-10 h-1 rounded-full bg-blue-500 mr-2"></div>
-          <div className="w-10 h-1 rounded-full bg-green-400"></div>
-        </div>
+        <div className="bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-2 max-w-35 mb-14 mx-auto"/>
 
         {/* Project Grid */}
-        <ProjectsGrid />
+        <ProjectsGrid/>
       </div>
     </section>
   );
