@@ -67,8 +67,8 @@ export default function Navbar() {
                 <Link 
                   key={link.path} 
                   href={link.path}
-                  className={`text-gray-800 hover:text-blue-600 transition text-lg font-semibold ${
-                    pathname === link.path ? 'font-bold text-blue-600' : ''
+                  className={`text-gray-800 hover:text-blue-700 transition text-lg font-semibold ${
+                    pathname === link.path ? 'font-bold text-blue-700' : ''
                   }`}
                 >
                   {link.title}
@@ -80,7 +80,7 @@ export default function Navbar() {
             {user ? (
               <Link 
                 href="/dashboard" 
-                className="text-gray-800 hover:text-gray-900 font-semibold text-lg"
+                className="text-gray-800 hover:text-blue-700 font-semibold text-lg"
               >
                 Dashboard
               </Link>
@@ -88,7 +88,7 @@ export default function Navbar() {
               <div className="flex items-center gap-8">
                 <Link 
                   href="/auth/login" 
-                  className="text-gray-800 hover:text-blue-600 transition text-lg font-semibold"
+                  className="text-gray-800 hover:text-blue-700 transition text-lg font-semibold"
                 >
                   Log In
                 </Link>
