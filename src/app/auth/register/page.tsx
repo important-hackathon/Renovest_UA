@@ -69,12 +69,13 @@ export default function RegisterPage() {
                         <button
                             type="button"
                             onClick={() => setRole('owner')}
-                            className={`px-6 py-2 rounded-full border border-blue-400 cursor-pointer text-black transition-all duration-300 ${
+                            className={`px-7 py-2 rounded-full border border-blue-400 cursor-pointer text-black transition-all duration-300 ${
                                 role === 'owner' ? 'bg-lime-300' : 'bg-white'
                             }`}
                         >
                             Owner
                         </button>
+                        <span className='py-2 px-1'>or</span>
                         <button
                             type="button"
                             onClick={() => setRole('investor')}
@@ -142,7 +143,7 @@ export default function RegisterPage() {
                     Create account
                 </button>
 
-                <p className="text-center text-sm text-gray-600 cursor-pointer">
+                <p className="text-center text-xs text-gray-600 cursor-pointer">
                     Already have an account?{' '}
                     <Link href="/auth/login" className="text-blue-500 underline">
                         Login
