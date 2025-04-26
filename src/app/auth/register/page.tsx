@@ -51,7 +51,7 @@ export default function RegisterPage() {
             {/* Building image */}
             <div className="absolute bottom-0 right-40 w-[300px] sm:w-[300px] z-10 pointer-events-none">
                 <Image
-                    src="/assets/images/building.svg"
+                    src="/assets/images/building-bg.svg"
                     alt="Building"
                     width={500}
                     height={700}
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                         <label className="text-center">Username</label>
                         <input
                             type="text"
-                            placeholder="Type your username"
+                            placeholder="Type your username.."
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
@@ -105,7 +105,7 @@ export default function RegisterPage() {
                         <label className="text-center">Phone number</label>
                         <input
                             type="text"
-                            placeholder="Type your phone"
+                            placeholder="Type your phone.."
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             className="w-full border bg-white border-lime-300 rounded-full px-5 py-2 focus:outline-none"
@@ -116,7 +116,7 @@ export default function RegisterPage() {
                         <label className="text-center">Gmail</label>
                         <input
                             type="email"
-                            placeholder="Type your email"
+                            placeholder="Type your email.."
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -128,7 +128,7 @@ export default function RegisterPage() {
                         <label className="text-center">Password</label>
                         <input
                             type="password"
-                            placeholder="Type your password"
+                            placeholder="Type your password.."
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
