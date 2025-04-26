@@ -5,7 +5,7 @@ import Image from 'next/image';
 export default function WhyUs() {
     return (
         <section className="relative w-full bg-gradient-to-b from-white to-gray-100 py-20 overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full z-0">
+            <div className="absolute top-20 left-0 w-full h-full z-0">
                 <Image
                     src="/assets/images/about-us-background.svg"
                     alt="Background"
