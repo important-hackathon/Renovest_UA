@@ -50,10 +50,16 @@ export const Navbar = () => {
           </div>
           <div className="flex items-center">
             {isLoading ? (
-              <span>Loading...</span>
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <span className="text-sm">Loading...</span>
+              </div>
             ) : user ? (
               <div className="flex items-center space-x-4">
-                <span>{user.email}</span>
+                <Link href="/dashboard" className="text-sm font-medium hover:bg-blue-700 px-3 py-2 rounded-md">
+                  Dashboard
+                </Link>
+                <span className="hidden md:inline">{user.email}</span>
                 <button 
                   onClick={handleSignOut}
                   className="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
