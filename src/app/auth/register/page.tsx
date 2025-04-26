@@ -143,7 +143,7 @@ export default function RegisterPage() {
                     Create account
                 </button>
 
-                <p className="text-center text-xs text-gray-600 cursor-pointer">
+                <p className="text-center text-md text-gray-600 cursor-pointer">
                     Already have an account?{' '}
                     <Link href="/auth/login" className="text-blue-500 underline">
                         Login

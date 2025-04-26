@@ -87,7 +87,7 @@ export default function LoginPage() {
                     Login
                 </button>
 
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-md text-gray-600">
                     Don&apos;t have an account?{' '}
                     <Link href="/auth/register" className="text-blue-500 underline">
                         Register
