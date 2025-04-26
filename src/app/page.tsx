@@ -1,5 +1,6 @@
 import AboutUs from "@/components/home/AboutUs";
 import JoinMovement from "@/components/home/JoinMovement";
+import WhyRenovate from "@/components/home/WhyChooseUs";
 import { Navbar } from "@/components/Navbar";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <Navbar />
       <AboutUs />
       <JoinMovement />
+      <WhyRenovate />
     </div>
   );
 }
