@@ -23,3 +23,16 @@ export type Project = {
     created_at: string;
   };
   
+  export type ProjectWithOwner = {
+    id: string;
+    title: string;
+    description: string;
+    investment_goal: number;
+    investment_received: number;
+    image_url?: string;
+    owner?: {
+      id: string;
+      email: string;
+      phone?: string;
+    };
+  };  
