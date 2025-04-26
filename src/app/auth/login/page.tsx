@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { AuthInput } from '@/components/auth/AuthInput';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -32,22 +31,59 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 via-white to-green-200 overflow-hidden px-4">
+        <div className="relative flex items-center justify-center min-h-screen bg-white overflow-hidden px-4">
+
+            {/* Full background */}
             <Image
-                src="/assets/images/file.svg" // Replace with your SVG path
+                src="/assets/images/sign-up-bg.svg"
                 alt="Background"
                 fill
-                className="object-cover opacity-20 pointer-events-none"
+                className="object-cover pointer-events-none z-0"
             />
-            <form onSubmit={handleSubmit} className="relative bg-white/90 p-10 rounded-3xl shadow-lg max-w-md w-full flex flex-col gap-6">
-                <h1 className="text-3xl font-bold text-center text-black">WELCOME BACK</h1>
 
-                <AuthInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <AuthInput type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            {/* Building */}
+            <div className="absolute bottom-0 right-0 w-[300px] sm:w-[400px] md:w-[500px] z-10 pointer-events-none">
+                <Image
+                    src="/assets/images/building.svg"
+                    alt="Building"
+                    width={500}
+                    height={800}
+                    className="w-full h-auto"
+                />
+            </div>
+
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="relative bg-white/60 p-10 rounded-3xl shadow-2xl max-w-3xl w-full flex flex-col gap-8 backdrop-blur-xl z-20">
+                <h1 className="text-3xl font-bold text-center text-black">LOG IN INTO YOUR ACCOUNT</h1>
+
+                <div className="flex flex-col gap-6 items-center">
+                    <div className="flex flex-col gap-2 w-1/2">
+                        <label className="text-black font-semibold text-sm text-center">Email</label>
+                        <input
+                            type="email"
+                            placeholder="Type your email.."
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="w-full border border-lime-300 rounded-full px-5 py-2 focus:outline-none bg-white"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2 w-1/2">
+                        <label className="text-black font-semibold text-sm text-center">Password</label>
+                        <input
+                            type="password"
+                            placeholder="Type your password.."
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="w-full border border-lime-300 rounded-full px-5 py-2 focus:outline-none bg-white"
+                        />
+                    </div>
+                </div>
 
                 {error && <p className="text-center text-red-500 text-sm">{error}</p>}
 
-                <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-full text-lg transition">
+                <button type="submit" className="w-fit self-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-12 rounded-full text-lg transition">
                     Login
                 </button>
 
