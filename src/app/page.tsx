@@ -1,6 +1,8 @@
 import AboutUs from "@/components/home/AboutUs";
 import JoinMovement from "@/components/home/JoinMovement";
-import WhyRenovate from "@/components/home/WhyChooseUs";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import OurOfffers from "@/components/home/OurOffers";
+
 import { Navbar } from "@/components/Navbar";
 
 export default function Home() {
@@ -8,8 +10,9 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <AboutUs />
+      <OurOfffers />
+      <WhyChooseUs />
       <JoinMovement />
-      <WhyRenovate />
     </div>
   );
 }

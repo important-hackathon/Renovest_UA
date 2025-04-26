@@ -3,15 +3,15 @@ import Marquee from "react-fast-marquee";
 
 const AboutUs = () => {
   return (
-    <div className="h-[100vh] flex flex-col justify-end">
-      <div className="w-full h-[80vh] bg-[url('/assets/images/about-us-background.svg')] bg-cover bg-center no-repeat relative">
+    <div className="min-h-[100vh] flex flex-col justify-end">
+      <div className="w-full min-h-[80vh] bg-[url('/assets/images/about-us-background.svg')] bg-cover bg-center no-repeat relative">
         <div className="max-w-7xl mx-auto px-5 box-border">
           <div className="max-w-[600px]">
             <h1 className="text-[#000000] text-[32px] sm:text-[48px] font-bold mb-3.5">
               Renovest UA
             </h1>
 
-            <div className="bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[8px] max-w-[150px] mb-6" />
+            <div className="bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[8px] max-w-[150px] mb-5" />
 
             <p className="text-[16px] sm:text-[18px] mb-6">
               Is an online platform that connects international investors with
@@ -27,10 +27,19 @@ const AboutUs = () => {
               gradient={false}
               autoFill={true}
             >
-              <p className="text-xl font-bold text-black">
+              <p className="text-base md:text-xl font-bold text-black">
                 облігації - стартапи - акції - краудфандинг -{" "}
               </p>
             </Marquee>
+
+            <div className="flex gap-5 items-center mt-8">
+              <button className="text-[18px] text-white lg:text-2xl font-bold py-2.5 px-4 lg:px-8 bg-[#0088FF] rounded-full">
+                Register
+              </button>
+              <button className="text-[18px] lg:text-2xl font-bold py-2.5 px-4 lg:px-8 bg-[#C6FF80] text-black rounded-full">
+                Explore Projects
+              </button>
+            </div>
           </div>
         </div>
         <img
