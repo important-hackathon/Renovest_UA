@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function DashboardLayout({
   children,
@@ -17,13 +17,13 @@ export default function DashboardLayout({
   useEffect(() => {
     // Redirect to login if not authenticated
     if (!isLoading && !user) {
-      router.push('/auth/login');
+      router.push("/auth/login");
     }
   }, [user, isLoading, router]);
 
   const handleSignOut = async () => {
     await signOut();
-    router.push('/');
+    router.push("/");
   };
 
   if (isLoading) {
@@ -41,17 +41,26 @@ export default function DashboardLayout({
     return null; // Don't render anything while redirecting
   }
 
-  const navigationItems = user.role === 'project_owner' 
-    ? [
-        { name: 'My Projects', href: '/dashboard/projects', current: true },
-        { name: 'Create Project', href: '/dashboard/projects/create', current: false },
-        { name: 'Updates', href: '/dashboard/updates', current: false },
-      ]
-    : [
-        { name: 'My Investments', href: '/dashboard/investments', current: true },
-        { name: 'Favorites', href: '/dashboard/favorites', current: false },
-        { name: 'Reports', href: '/dashboard/reports', current: false },
-      ];
+  const navigationItems =
+    user.role === "project_owner"
+      ? [
+          { name: "My Projects", href: "/dashboard/projects", current: true },
+          {
+            name: "Create Project",
+            href: "/dashboard/projects/create",
+            current: false,
+          },
+          { name: "Updates", href: "/dashboard/updates", current: false },
+        ]
+      : [
+          {
+            name: "My Investments",
+            href: "/dashboard/investments",
+            current: true,
+          },
+          { name: "Favorites", href: "/dashboard/favorites", current: false },
+          { name: "Reports", href: "/dashboard/reports", current: false },
+        ];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -106,12 +115,36 @@ export default function DashboardLayout({
               >
                 <span className="sr-only">Open main menu</span>
                 {isMobileMenuOpen ? (
-                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="block h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 ) : (
-                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <svg
+                    className="block h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
                   </svg>
                 )}
               </button>
@@ -144,9 +177,13 @@ export default function DashboardLayout({
             <div className="pt-4 pb-3 border-t border-blue-700">
               <div className="flex items-center px-5">
                 <div className="ml-3">
-                  <div className="text-base font-medium leading-none text-white">{user.email}</div>
+                  <div className="text-base font-medium leading-none text-white">
+                    {user.email}
+                  </div>
                   <div className="text-sm font-medium leading-none text-blue-200 mt-1">
-                    {user.role === 'project_owner' ? 'Project Owner' : 'Investor'}
+                    {user.role === "project_owner"
+                      ? "Project Owner"
+                      : "Investor"}
                   </div>
                 </div>
               </div>
@@ -166,15 +203,15 @@ export default function DashboardLayout({
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold text-gray-900">
-            {user.role === 'project_owner' ? 'Project Owner Dashboard' : 'Investor Dashboard'}
+            {user.role === "project_owner"
+              ? "Project Owner Dashboard"
+              : "Investor Dashboard"}
           </h1>
         </div>
       </header>
 
       <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          {children}
-        </div>
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">{children}</div>
       </main>
     </div>
   );

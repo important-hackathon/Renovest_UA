@@ -1,14 +1,19 @@
+import Image from "next/image";
+import Marquee from "react-fast-marquee";
+
 const AboutUs = () => {
   return (
     <div className="h-[100vh] flex flex-col justify-end">
-      <div className="w-full h-[80vh] bg-[url('/assets/images/about-us-background.svg')] bg-cover bg-center no-repeat">
-        <div className="max-w-7xl mx-auto ">
+      <div className="w-full h-[80vh] bg-[url('/assets/images/about-us-background.svg')] bg-cover bg-center no-repeat relative">
+        <div className="max-w-7xl mx-auto px-5 box-border">
           <div className="max-w-[600px]">
-            <h1 className="text-[#000000] text-[48px] font-bold mb-3.5">
+            <h1 className="text-[#000000] text-[32px] sm:text-[48px] font-bold mb-3.5">
               Renovest UA
             </h1>
+
             <div className="bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[8px] max-w-[150px] mb-6" />
-            <p className="text-[18px]">
+
+            <p className="text-[16px] sm:text-[18px] mb-6">
               Is an online platform that connects international investors with
               post-war reconstruction projects across Ukraine. We are building a
               transparent and secure ecosystem for investing in infrastructure
@@ -16,9 +21,23 @@ const AboutUs = () => {
               initiatives.
             </p>
 
-            <div></div>
+            <Marquee
+              direction="right"
+              speed={40}
+              gradient={false}
+              autoFill={true}
+            >
+              <p className="text-xl font-bold text-black">
+                облігації - стартапи - акції - краудфандинг -{" "}
+              </p>
+            </Marquee>
           </div>
         </div>
+        <img
+          className="absolute right-30 top-0 h-full hidden lg:block"
+          src="/assets/images/building.svg"
+          alt="Building image"
+        />
       </div>
     </div>
   );
