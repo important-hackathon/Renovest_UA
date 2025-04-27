@@ -75,22 +75,22 @@ export default function ProjectReportsPage() {
             id: 1,
             date: '01.03.2025',
             title: 'Stage 1 Completed',
-            description: 'New photos from the construction site are now available! The images showcase the progress made over the past month, highlighting foundation work, material installation, and initial assembly stages.',
+            description: 'New photos from the construction school are now available! The images showcase the progress made over the past month, highlighting foundation work, material installation, and initial assembly stages.',
             images: ['/assets/temp/slider1.jpg', '/assets/temp/slider2.jpg']
           },
           {
             id: 2,
             date: '01.03.2025',
             title: 'New Materials Purchased',
-            description: 'Essential construction materials, including reinforced concrete and high-grade steel, have been purchased and delivered to the site. Procurement was completed with verified suppliers to ensure quality and reliability.',
-            images: ['/assets/temp/slider3.jpg', '/assets/temp/slider4.jpg']
+            description: 'Essential construction materials, including reinforced concrete and high-grade steel, have been purchased and delivered to the school. Procurement was completed with verified suppliers to ensure quality and reliability.',
+            images: ['/assets/temp/slider2.jpg', '/assets/temp/slider4.jpg']
           },
           {
             id: 3,
             date: '01.03.2025',
             title: 'Photo Report: Work in Progress',
-            description: 'New photos from the construction site are now available! The images showcase the progress made over the past month, highlighting foundation work, material installation, and initial assembly stages.',
-            images: ['/assets/temp/slider1.jpg', '/assets/temp/slider3.jpg']
+            description: 'New photos from the construction school are now available! The images showcase the progress made over the past month, highlighting foundation work, material installation, and initial assembly stages.',
+            images: ['/assets/temp/slider3.jpg', '/assets/temp/slider4.jpg']
           },
         ];
 
@@ -288,7 +288,7 @@ export default function ProjectReportsPage() {
                   <div className="col-span-12 md:col-span-3 p-4 md:p-6 flex justify-center md:justify-end">
                     <button
                       onClick={() => setSelectedReport(selectedReport?.id === report.id ? null : report)}
-                      className="bg-[#C6FF80] text-black px-6 py-2 rounded-full text-sm font-medium hover:bg-[#b5ff60] hover:scale-105 transition-all duration-300 ease-in-out"
+                      className="bg-[#C6FF80] text-black px-6 py-2 rounded-full text-sm font-medium hover:bg-[#b5ff60] hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer"
                     >
                       {selectedReport?.id === report.id ? 'Hide Details' : 'View'}
                     </button>
