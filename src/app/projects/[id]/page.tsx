@@ -9,6 +9,8 @@ import Carousel from "@/components/ui/Carousel";
 import Image from "next/image";
 import { SwiperSlide } from "swiper/react";
 import { stages } from "./stages";
+import InvestmentModal from "@/components/investments/InvestmentsModal";
+import ProjectReportsButton from "@/components/projects/ProjectReportsButton";
 
 export default function ProjectDetailsPage() {
   const router = useRouter();
@@ -20,6 +22,14 @@ export default function ProjectDetailsPage() {
   const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  
+  // Placeholder images (until we have real project images)
+  const [images, setImages] = useState<string[]>([
+    "/assets/temp/slider1.jpg",
+    "/assets/temp/slider2.jpg", 
+    "/assets/temp/slider3.jpg",
+    "/assets/temp/slider4.jpg"
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,8 +104,12 @@ export default function ProjectDetailsPage() {
 
         // If we have project data, fetch the owner details
         if (data) {
-          // Separate query for owner to simplify
-          const { data: ownerData, error: ownerError } = await supabase
+          // We're using mock data for owners instead of fetching real data
+          console.log("Using mock owner data instead of real credentials");
+          
+          // Skip fetching real owner data since we're using mock data
+          /*
+          let { data: ownerData, error: ownerError } = await supabase
             .from("users")
             .select(
               `
@@ -106,16 +120,36 @@ export default function ProjectDetailsPage() {
             )
             .eq("id", data.owner_id)
             .single();
+            
+          // If no user data or error, set default values
+          if (ownerError || !ownerData) {
+            console.log("Falling back to basic user data");
+            ownerData = {
+              id: data.owner_id,
+              email: "Owner information unavailable",
+              phone: ""
+            };
+          }
 
-          if (ownerError) {
-            console.error("Error fetching owner details:", ownerError);
-          } else {
-            console.log("Owner data:", ownerData);
-            // Combine project with owner data
-            setProject({
-              ...data,
-              owner: ownerData,
-            });
+          console.log("Owner data:", ownerData);
+          */
+          
+          // Update images array if project has an image
+          if (data.image_url) {
+            // Create a new array instead of modifying the state directly
+            const updatedImages = [data.image_url, ...images.slice(0, 3)];
+            setImages(updatedImages);
+          }
+          
+          // Use project data without real owner details
+          setProject({
+            ...data,
+            // We'll use mock owner data in the render instead
+          });
+            
+          // Update images array if project has an image
+          if (data.image_url) {
+            setImages([data.image_url, ...images.slice(0, 3)]);
           }
         } else {
           setProject(data);
@@ -129,11 +163,11 @@ export default function ProjectDetailsPage() {
     };
 
     fetchData();
-  }, [projectId]);
+  }, [projectId]); // Remove images from the dependency array
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen ">
+      <div className="flex items-center justify-center h-auto">
         <div className="animate-pulse flex flex-col gap-4 w-full max-w-3xl">
           <div className="bg-gray-200 h-64 w-full rounded-lg"></div>
           <div className="h-8 bg-gray-200 rounded w-3/4"></div>
@@ -189,18 +223,15 @@ export default function ProjectDetailsPage() {
       day: "numeric",
     }
   );
-
-  // Remove later (just for test)
-  const images: string[] = [
-    "/assets/temp/slider1.jpg",
-    "/assets/temp/slider2.jpg",
-    "/assets/temp/slider3.jpg",
-    "/assets/temp/slider4.jpg",
-  ];
+  
+  // Mock owner data instead of using real credentials
+  const ownerName = "Project Manager";
+  const ownerPhone = "+380 (XX) XXX-XX-XX";
+  const ownerEmail = "manager@renovestua.com";
 
   return (
     <>
-      <section className="min-h-screen bg-white text-black py-12 mt-10">
+      <section className="h-auto bg-white text-black py-12 mt-10">
         <div className="max-w-7xl mx-auto px-5 box-border">
           <div className="mb-5">
             <button
@@ -208,11 +239,11 @@ export default function ProjectDetailsPage() {
               className="rounded-full bg-[#C6FF80] cursor-pointer px-3 py-1.5 flex items-center gap-2 text-base md:text-xl font-semibold hover:scale-105 transition-all duration-300 ease-in-out"
             >
               <MoveLeft />
-              <span className="text-black">Назад</span>
+              <span className="text-black">Back</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full h-full pb-120 md:pb-90 lg:pb-35 border-b-3 border-[#D7DDE7] items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full h-full pb-120 md:pb-90 lg:pb-35 border-[#D7DDE7] items-start">
             {/*Slider*/}
 
             {images.length !== 0 && (
@@ -241,9 +272,10 @@ export default function ProjectDetailsPage() {
                       >
                         <Image
                           src={img}
-                          alt="Animal image"
-                          layout="fill"
-                          objectFit="cover"
+                          alt={`${project.title} image ${index+1}`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          style={{ objectFit: "cover" }}
                         />
                       </SwiperSlide>
                     ))}
@@ -253,13 +285,12 @@ export default function ProjectDetailsPage() {
                 <div className="mt-6 mb-10">
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {images
-                      .reverse()
                       .slice(0, 4)
                       .map((img, index) => (
                         <div className="rounded-xl overflow-hidden" key={index}>
                           <img
                             src={img}
-                            alt="Animal"
+                            alt={`${project.title} thumbnail ${index+1}`}
                             className="aspect-square object-cover w-full h-full"
                           />
                         </div>
@@ -271,15 +302,14 @@ export default function ProjectDetailsPage() {
                 <div className="">
                   <div className="text-lg">
                     <p>Owner:</p>
-                    <p className="font-bold">
-                      Mykhailo Montimovich Mykolaivich
-                    </p>
+                    <p className="font-bold">{ownerName}</p>
                   </div>
 
                   {/*Contacts*/}
                   <div className="text-lg mb-7">
                     <p>Contacts:</p>
-                    <p className="font-bold">+380980123456</p>
+                    <p className="font-bold">{ownerPhone}</p>
+                    <p className="font-bold">{ownerEmail}</p>
                   </div>
                 </div>
               </div>
@@ -289,34 +319,25 @@ export default function ProjectDetailsPage() {
             <div className="order-1 md:order-last relative text-[#432907]">
               <div className="mb-5">
                 <h1 className="font-bold text-2xl mb-5">
-                  Bond for the restoration of the M-30 highway (Lviv - Odesa)
+                  {project.title}
                 </h1>
 
                 <div className="bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[8px] max-w-[150px] mb-5" />
 
                 <p className="">
-                  This bond finances the restoration and modernization of the
-                  M-30 highway, a strategic transport corridor connecting Lviv
-                  and Odesa. The project aims to repair war-damaged sections,
-                  expand traffic capacity, and improve safety standards,
-                  enhancing both national logistics and international trade
-                  routes.
+                  {project.description}
                 </p>
               </div>
 
               {/*Bond details*/}
               <div className="mb-5">
-                <h2 className="font-bold text-xl mb-2">Bond details</h2>
+                <h2 className="font-bold text-xl mb-2">Project details</h2>
                 <ul className="list-disc pl-7">
-                  <li>Type: Government Infrastructure Bond</li>
-                  <li>Investment Term: 5 years</li>
-                  <li>Expected Return: 7% annually</li>
-                  <li>Currency: USD or EUR</li>
-                  <li>Minimum Investment: $500</li>
-                  <li>
-                    Guarantee: Secured by the Government of Ukraine, under
-                    international reconstruction agreements
-                  </li>
+                  <li>Investment Goal: ${Number(project.investment_goal).toLocaleString()}</li>
+                  <li>Current Investment: ${Number(project.investment_received).toLocaleString()}</li>
+                  <li>Progress: {percent}% funded</li>
+                  <li>Status: {project.status ? project.status.charAt(0).toUpperCase() + project.status.slice(1) : 'Active'}</li>
+                  <li>Created: {formattedDate}</li>
                 </ul>
               </div>
 
@@ -325,21 +346,20 @@ export default function ProjectDetailsPage() {
                 <h2 className="font-bold text-xl mb-2">Project Verification</h2>
                 <ul className="list-disc pl-7">
                   <li>
-                    Officially approved by the Ministry of Infrastructure of
-                    Ukraine
+                    Verified through Renovest UA platform
                   </li>
-                  <li>Independently audited by Diia</li>
                   <li>
-                    Full transparency through Renovest UA platform reporting
+                    Full transparency through platform reporting
                   </li>
                 </ul>
               </div>
 
               <div className="flex gap-5 flex-wrap">
-                <button className="bg-[#C6FF80] px-6 py-2 text-black rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
-                  View reports
-                </button>
-                <button className="bg-[#0088FF] px-6 py-2 text-white rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
+                <ProjectReportsButton projectId={project.id} />
+                <button 
+                  onClick={() => setIsInvestModalOpen(true)}
+                  className="bg-[#0088FF] px-6 py-2 text-white rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
+                >
                   Invest now
                 </button>
               </div>
@@ -347,6 +367,7 @@ export default function ProjectDetailsPage() {
           </div>
         </div>
       </section>
+      
       <section className="bg-black py-12">
         <div className="max-w-5xl mx-auto px-5 box-border">
           <div className="flex justify-center mb-10">
@@ -375,15 +396,27 @@ export default function ProjectDetailsPage() {
           </div>
         </div>
       </section>
+      
       <div className="bg-white pt-10 pb-2 px-5">
         <div className="flex justify-center mb-20">
-          <button className="bg-[#0088FF] text-white px-6 md:px-12 py-2.5 font-bold text-lg md:text-2xl rounded-full hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
+          <button 
+            onClick={() => setIsInvestModalOpen(true)}
+            className="bg-[#0088FF] text-white px-6 md:px-12 py-2.5 font-bold text-lg md:text-2xl rounded-full hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer"
+          >
             Invest in this project
           </button>
         </div>
 
         <div className="max-w-[700px] mx-auto bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[4px]" />
       </div>
+      
+      {/* Investment Modal */}
+      <InvestmentModal
+        projectId={project.id}
+        projectTitle={project.title}
+        isOpen={isInvestModalOpen}
+        onClose={() => setIsInvestModalOpen(false)}
+      />
     </>
   );
 }

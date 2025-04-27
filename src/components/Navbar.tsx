@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabaseClient';
 import Logo from '../../public/assets/images/RenovestUA.svg'
+import LanguageSelector from '@/components/LanguageSelector';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -62,6 +63,8 @@ export default function Navbar() {
           {/* Desktop Navigation - Right Side */}
           <div className="hidden md:flex items-center gap-10">
             {/* Main Navigation Links */}
+                        {/* Language Selector */}
+                        <LanguageSelector />
             <nav className="flex items-center gap-10">
               {navLinks.map(link => (
                 <Link 
@@ -102,19 +105,22 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-gray-700"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          {/* Mobile Menu Button and Language Selector */}
+          <div className="md:hidden flex items-center gap-4">
+            <LanguageSelector />
+            <button 
+              className="text-gray-700"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -149,7 +155,7 @@ export default function Navbar() {
                 <>
                   <li>
                     <Link 
-                      href="/auth"
+                      href="/auth/login"
                       className="block py-2.5 text-gray-800 hover:text-blue-600 text-lg font-semibold"
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -158,7 +164,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link 
-                      href="/auth"
+                      href="/auth/register"
                       className="block py-2.5 font-bold text-blue-600 hover:text-blue-800 text-lg"
                       onClick={() => setIsMenuOpen(false)}
                     >
