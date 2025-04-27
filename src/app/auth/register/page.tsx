@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
+import RegistrationModal from '@/components/auth/CustomRegistrationModal';
 
 export default function RegisterPage() {
     const supabase = createClientComponentClient();
@@ -16,6 +17,7 @@ export default function RegisterPage() {
     const [phone, setPhone] = useState('');
     const [role, setRole] = useState('owner');
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,9 +34,15 @@ export default function RegisterPage() {
         if (signupError) {
             setError(signupError.message);
         } else {
-            alert('Registered successfully! Please check your email.');
-            router.push('/auth/login');
+            // Open custom modal instead of alert
+            setIsModalOpen(true);
         }
+    };
+
+    // Handle modal close
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        router.push('/auth/login');
     };
 
     return (
@@ -113,7 +121,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-center">Gmail</label>
+                        <label className="text-center">Email</label>
                         <input
                             type="email"
                             placeholder="Type your email.."
@@ -150,6 +158,13 @@ export default function RegisterPage() {
                     </Link>
                 </p>
             </form>
+            
+            {/* Registration Success Modal */}
+            <RegistrationModal 
+                isOpen={isModalOpen} 
+                onClose={handleModalClose} 
+                email={email}
+            />
         </div>
     );
 }

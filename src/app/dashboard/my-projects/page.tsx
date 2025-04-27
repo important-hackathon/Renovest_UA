@@ -93,7 +93,7 @@ export default function MyProjectsPage() {
             <h3 className="text-xl font-semibold mb-4">You haven't created any projects yet</h3>
             <p className="text-gray-600 mb-8">Start by creating your first investment opportunity</p>
             <Link
-              href="/dashboard"
+              href="/dashboard/new-project"
               className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-sm font-semibold"
             >
               Create New Project
