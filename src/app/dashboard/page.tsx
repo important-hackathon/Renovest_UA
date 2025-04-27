@@ -1,21 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import CreateProjectForm from "@/components/projects/CreateProjectForm";
-import Image from "next/image";
-import { LockKeyhole } from "lucide-react";
-import { investorReviews } from "./investorReviews";
-import Review from "@/components/dashboard/Review";
+import { useEffect, useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import CreateProjectForm from '@/components/projects/CreateProjectForm';
+import AOS from 'aos';
+import "aos/dist/aos.css";
 
 interface UserData {
   id: string;
   email: string;
   user_metadata: {
     name?: string;
-    role?: "investor" | "owner";
+    role?: 'investor' | 'owner';
     phone?: string;
   };
 }
@@ -31,41 +29,62 @@ export default function DashboardPage() {
   });
 
   useEffect(() => {
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out',
+      once: true,
+      offset: 50,
+    });
+    
+    // Custom animation for width growth
+    AOS.refresh();
+    document.querySelectorAll('[data-aos="width"]').forEach(element => {
+      element.setAttribute('data-aos', 'fade-right');
+      (element as HTMLElement).style.width = '0';
+      
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              (element as HTMLElement).style.transition = 'width 1s ease-out';
+              (element as HTMLElement).style.width = ''; // Reset to CSS value
+            }, parseInt(element.getAttribute('data-aos-delay') || '0'));
+            observer.disconnect();
+          }
+        });
+      });
+      
+      observer.observe(element);
+    });
+
     const fetchUserData = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        router.push("/auth");
+        router.push('/auth');
         return;
       }
       setUser(user as UserData);
 
       // Fetch stats based on user role
-      if (user.user_metadata?.role === "owner") {
+      if (user.user_metadata?.role === 'owner') {
         const { data: projects, error } = await supabase
-          .from("projects")
-          .select("id")
-          .eq("owner_id", user.id);
-
+          .from('projects')
+          .select('id')
+          .eq('owner_id', user.id);
+        
         if (!error) {
-          setStats((prev) => ({
-            ...prev,
-            totalProjects: projects?.length || 0,
-          }));
+          setStats(prev => ({ ...prev, totalProjects: projects?.length || 0 }));
         }
-      } else if (user.user_metadata?.role === "investor") {
+      } else if (user.user_metadata?.role === 'investor') {
         const { data: investments, error } = await supabase
-          .from("investments")
-          .select("amount")
-          .eq("investor_id", user.id);
-
+          .from('investments')
+          .select('amount')
+          .eq('investor_id', user.id);
+        
         if (!error) {
-          const total = (investments || []).reduce(
-            (sum, inv) => sum + Number(inv.amount),
-            0
-          );
-          setStats((prev) => ({ ...prev, totalInvested: total }));
+          const total = (investments || []).reduce((sum, inv) => sum + Number(inv.amount), 0);
+          setStats(prev => ({ ...prev, totalInvested: total }));
         }
       }
     };
@@ -75,7 +94,7 @@ export default function DashboardPage() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push("/");
+    router.push('/');
   };
 
   if (!user) {
@@ -95,48 +114,48 @@ export default function DashboardPage() {
     );
   }
 
-  const role = user.user_metadata?.role || "investor";
-  const name = user.user_metadata?.name || "User";
+  const role = user.user_metadata?.role || 'investor';
+  const name = user.user_metadata?.name || 'User';
 
   return (
     <section className="min-h-screen bg-gray-50 py-12 px-4">
-      {/* Header */}
-      <div className="bg-[#000000] rounded-xl p-8 mb-8 text-white shadow-lg">
-        <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div 
+          className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-8 mb-8 text-white shadow-lg"
+          data-aos="fade-down"
+          data-aos-delay="100"
+        >
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold mb-2">Welcome, {name}</h1>
-              <p className="text-white">
-                {role === "owner"
-                  ? "Project Owner Dashboard"
-                  : "Investor Dashboard"}
-              </p>
+              <p className="text-blue-100">{role === 'owner' ? 'Project Owner Dashboard' : 'Investor Dashboard'}</p>
             </div>
             <div className="hidden md:block bg-white/10 p-4 rounded-lg backdrop-blur-sm">
-              {role === "owner" ? (
+              {role === 'owner' ? (
                 <>
-                  <p className="text-sm">Active Projects:</p>
-                  <p className="text-2xl font-bold text-right">
-                    {stats.totalProjects}
-                  </p>
+                  <p className="text-sm">Your Projects</p>
+                  <p className="text-2xl font-bold">{stats.totalProjects}</p>
                 </>
               ) : (
                 <>
-                  <p className="text-sm">Invested projects</p>
-                  <p className="text-2xl font-bold">{stats.totalProjects}</p>
+                  <p className="text-sm">Total Invested</p>
+                  <p className="text-2xl font-bold">${stats.totalInvested.toLocaleString()}</p>
                 </>
               )}
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-5xl mx-auto mb-15">
         {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Quick Stats for Mobile */}
-          <div className="md:hidden bg-white p-6 rounded-xl shadow-sm">
-            {role === "owner" ? (
+          <div 
+            className="md:hidden bg-white p-6 rounded-xl shadow-sm"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            {role === 'owner' ? (
               <>
                 <p className="text-gray-500">Your Projects</p>
                 <p className="text-2xl font-bold">{stats.totalProjects}</p>
@@ -144,199 +163,113 @@ export default function DashboardPage() {
             ) : (
               <>
                 <p className="text-gray-500">Total Invested</p>
-                <p className="text-2xl font-bold">
-                  ${stats.totalInvested.toLocaleString()}
-                </p>
+                <p className="text-2xl font-bold">${stats.totalInvested.toLocaleString()}</p>
               </>
             )}
           </div>
 
           {/* Action Cards */}
-          {role === "owner" && (
+          {role === 'owner' && (
             <>
-              <Link
-                href="#"
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-[#8b8e90]"
+              <button
+                onClick={() => setShowCreateForm(true)}
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-dashed border-blue-300 hover:border-blue-500"
+                data-aos="zoom-in"
+                data-aos-delay="300"
               >
-                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#d1d1d1] mb-2">
-                  <LockKeyhole />
+                <div className="bg-blue-100 p-3 rounded-full mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
                 </div>
-                <h3 className="font-bold text-gray-900">My Messages</h3>
-                <p className="text-gray-500 text-sm mt-1">Will be added soon</p>
-              </Link>
+                <h3 className="font-bold text-gray-900">Create New Project</h3>
+                <p className="text-gray-500 text-sm mt-1">Add a new investment opportunity</p>
+              </button>
 
-              <Link
-                href="/dashboard/my-projects"
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-[#C6FF80]"
+              <Link 
+                href="/dashboard/my-projects" 
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center"
+                data-aos="zoom-in"
+                data-aos-delay="400"
               >
-                <Image
-                  className="mb-2"
-                  src="/assets/images/projectIcon.svg"
-                  alt="Project icon"
-                  width={40}
-                  height={40}
-                />
+                <div className="bg-green-100 p-3 rounded-full mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
                 <h3 className="font-bold text-gray-900">My Projects</h3>
-                <p className="text-gray-500 text-sm mt-1">
-                  View and manage your projects
-                </p>
-              </Link>
-
-              <Link
-                href="#"
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-[#8b8e90]"
-              >
-                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#d1d1d1] mb-2">
-                  <LockKeyhole />
-                </div>
-
-                <h3 className="font-bold text-gray-900">My Profile</h3>
-                <p className="text-gray-500 text-sm mt-1">Will be added soon</p>
+                <p className="text-gray-500 text-sm mt-1">View and manage your projects</p>
               </Link>
             </>
           )}
 
-          {role === "investor" && (
+          {role === 'investor' && (
             <>
-              <Link
-                href="#"
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-[#8b8e90]"
+              <Link 
+                href="/projects" 
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center"
+                data-aos="zoom-in"
+                data-aos-delay="300"
               >
-                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#d1d1d1] mb-2">
-                  <LockKeyhole />
+                <div className="bg-blue-100 p-3 rounded-full mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                 </div>
-
-                <h3 className="font-bold text-gray-900">My Messages</h3>
-                <p className="text-gray-500 text-sm mt-1">
-                  Communicate with others investors or project owners
-                </p>
+                <h3 className="font-bold text-gray-900">Browse Projects</h3>
+                <p className="text-gray-500 text-sm mt-1">Discover new investment opportunities</p>
               </Link>
 
-              <Link
-                href="/dashboard/my-investments"
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-[#C6FF80]"
+              <Link 
+                href="/dashboard/my-investments" 
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center"
+                data-aos="zoom-in"
+                data-aos-delay="400"
               >
-                <Image
-                  className="mb-2"
-                  src="/assets/images/projectIcon.svg"
-                  alt="Message icon"
-                  width={40}
-                  height={40}
-                />
+                <div className="bg-green-100 p-3 rounded-full mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
                 <h3 className="font-bold text-gray-900">My Investments</h3>
-                <p className="text-gray-500 text-sm mt-1">
-                  Track your investment portfolio
-                </p>
-              </Link>
-
-              <Link
-                href="/projects"
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center border-2 border-[#C6FF80]"
-              >
-                <Image
-                  className="mb-2"
-                  src="/assets/images/projectIcon.svg"
-                  alt="Message icon"
-                  width={40}
-                  height={40}
-                />
-
-                <h3 className="font-bold text-gray-900">View All Projects</h3>
-                <p className="text-gray-500 text-sm mt-1">
-                  See available opportunities
-                </p>
+                <p className="text-gray-500 text-sm mt-1">Track your investment portfolio</p>
               </Link>
             </>
           )}
-        </div>
 
-        {/* My Statistics */}
-        <div>
-          <h2 className="font-bold text-2xl md:text-[32px] text-center mb-8 md:mb-15">
-            My Statistics
-          </h2>
-
-          {role === "investor" && (
-            <div className="flex flex-col md:flex-row justify-between gap-10 lg:gap-20 items-start">
-              <div className="w-full md:w-[40%] flex flex-col gap-5 items-center">
-                <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                  <p className="mb-5">
-                    Average Project Funding Completion Time:
-                  </p>
-                  <p className="font-bold">4 months</p>
-                </div>
-
-                <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                  <p className="mb-5">
-                    Average Project Funding Completion Time:
-                  </p>
-                  <p className="font-bold">4 months</p>
-                </div>
-
-                <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                  <p className="mb-5">
-                    Average Project Funding Completion Time:
-                  </p>
-                  <p className="font-bold">4 months</p>
-                </div>
-              </div>
-
-              <div className="w-full md:w-[60%]">
-                <Image
-                  className="w-full h-full"
-                  src="/assets/images/investor-stats.svg"
-                  alt="Diagram"
-                  width={300}
-                  height={200}
-                />
-              </div>
+          {/* Additional Card */}
+          <Link 
+            href={role === 'owner' ? '/projects' : '/dashboard/profile'} 
+            className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col items-center justify-center text-center"
+            data-aos="zoom-in"
+            data-aos-delay="500"
+          >
+            <div className="bg-purple-100 p-3 rounded-full mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {role === 'owner' ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                )}
+              </svg>
             </div>
-          )}
-
-          {role === "owner" && (
-            <div className="grid grid-col-1 md:grid-cols-2 column gap-x-6 gap-y-4">
-              <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                <p className="mb-5">Total Profile Views:</p>
-                <p className="font-bold">14,500</p>
-              </div>
-
-              <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                <p className="mb-5">Most Popular Project:</p>
-                <p className="font-bold">Solar Energy Hub</p>
-              </div>
-
-              <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                <p className="mb-5">Average Funding per Project:</p>
-                <p className="font-bold">$1.77M</p>
-              </div>
-
-              <div className="text-center bg-[#E2FFBF] py-4 px-16 rounded-3xl">
-                <p className="mb-5">Most Popular Category:</p>
-                <p className="font-bold">Infrastructure (87%)</p>
-              </div>
-            </div>
-          )}
+            <h3 className="font-bold text-gray-900">{role === 'owner' ? 'View All Projects' : 'My Profile'}</h3>
+            <p className="text-gray-500 text-sm mt-1">{role === 'owner' ? 'See available opportunities' : 'View and edit your profile'}</p>
+          </Link>
         </div>
 
         {/* Sign Out Button */}
-        <div className="flex justify-center mt-12">
+        <div 
+          className="flex justify-center mt-12"
+          data-aos="fade-up"
+          data-aos-delay="600"
+        >
           <button
             onClick={handleSignOut}
             className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-8 rounded-lg text-sm transition flex items-center gap-2"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Sign Out
           </button>
@@ -345,10 +278,14 @@ export default function DashboardPage() {
         {/* Create Project Modal */}
         {showCreateForm && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl max-w-xl w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div 
+              className="bg-white rounded-xl max-w-xl w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+              data-aos="zoom-in"
+              data-aos-duration="400"
+            >
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Create New Project</h2>
-                <button
+                <button 
                   onClick={() => setShowCreateForm(false)}
                   className="text-gray-500 hover:text-gray-700"
                 >
@@ -360,27 +297,6 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
-
-      {/*Review from investors*/}
-      {role === "owner" && (
-        <div className="bg-black rounded-xl">
-          <div className="max-w-5xl px-5 box-border mx-auto pt-12 md:pt-21 pb-16">
-            <h2 className="text-white font-bold mb-16 text-2xl">
-              Reviews from Investors:
-            </h2>
-
-            <div className="flex flex-col gap-10">
-              {investorReviews.map((review, index) => (
-                <Review
-                  key={index}
-                  investor={review.investor}
-                  comment={review.comment}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

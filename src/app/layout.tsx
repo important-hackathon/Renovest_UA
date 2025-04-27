@@ -17,6 +17,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Renovest UA",
   description: "Platform for investing in post-war reconstruction of Ukraine",
+  keywords: [
+    "Renovest",
+    "Ukraine",
+    "Reconstruction",
+    "Investment",
+    "Platform",
+  ],
 };
 
 export default function RootLayout({
