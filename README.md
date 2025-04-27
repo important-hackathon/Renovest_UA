@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+RenovestUA - Connecting Investors to Ukrainian Reconstruction
+Live Demo
+Visit our platform at: https://renovest-ua.vercel.app/auth/login
+Project Overview
+RenovestUA is an online platform that connects international investors with post-war reconstruction projects across Ukraine. The platform offers a transparent and secure ecosystem for investing in infrastructure recovery, startup support, real estate development, and innovative initiatives.
+Key Features
 
-## Getting Started
+User Authentication: Secure login/registration system with role-based access (Investor/Project Owner)
+Project Marketplace: Browse and explore verified reconstruction projects
+Investment Management: Track investments, view project progress, and manage your portfolio
+Project Creation: Project owners can create, edit, and manage their reconstruction initiatives
+Project Details: Comprehensive project pages with progress tracking, stages, and reporting
+Responsive Design: Fully responsive interface that works on all devices
+Multi-language Support: Interface available in multiple languages including English and Ukrainian
 
-First, run the development server:
+Technology Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Frontend: Next.js 15, React 19, TypeScript
+Styling: TailwindCSS 4, AOS animations
+Backend Integration: Supabase for authentication, database, and storage
+UI Components: Custom components and Swiper for carousels
+State Management: React Hooks and Context API
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Backend Integration
+The following features are fully functional with backend support:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+User authentication and profile management
+Project creation, editing, and deletion
+Project listing and filtering
+File uploads for project images
+User role management (Investor/Project Owner)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Running Locally
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Clone the repository
+Install dependencies: npm install
+Set up environment variables for Supabase connection
+Run the development server: npm run dev
+Open http://localhost:3000 in your browser
