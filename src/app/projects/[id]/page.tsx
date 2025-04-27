@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import supabase from "@/lib/supabaseClient";
-import { MoveLeft } from "lucide-react";
+import { MoveLeft, Wand } from "lucide-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Carousel from "@/components/ui/Carousel";
 import Image from "next/image";
@@ -22,13 +22,13 @@ export default function ProjectDetailsPage() {
   const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Placeholder images (until we have real project images)
   const [images, setImages] = useState<string[]>([
     "/assets/temp/slider1.jpg",
-    "/assets/temp/slider2.jpg", 
+    "/assets/temp/slider2.jpg",
     "/assets/temp/slider3.jpg",
-    "/assets/temp/slider4.jpg"
+    "/assets/temp/slider4.jpg",
   ]);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function ProjectDetailsPage() {
         if (data) {
           // We're using mock data for owners instead of fetching real data
           console.log("Using mock owner data instead of real credentials");
-          
+
           // Skip fetching real owner data since we're using mock data
           /*
           let { data: ownerData, error: ownerError } = await supabase
@@ -133,20 +133,20 @@ export default function ProjectDetailsPage() {
 
           console.log("Owner data:", ownerData);
           */
-          
+
           // Update images array if project has an image
           if (data.image_url) {
             // Create a new array instead of modifying the state directly
             const updatedImages = [data.image_url, ...images.slice(0, 3)];
             setImages(updatedImages);
           }
-          
+
           // Use project data without real owner details
           setProject({
             ...data,
             // We'll use mock owner data in the render instead
           });
-            
+
           // Update images array if project has an image
           if (data.image_url) {
             setImages([data.image_url, ...images.slice(0, 3)]);
@@ -223,7 +223,7 @@ export default function ProjectDetailsPage() {
       day: "numeric",
     }
   );
-  
+
   // Mock owner data instead of using real credentials
   const ownerName = "Project Manager";
   const ownerPhone = "+380 (XX) XXX-XX-XX";
@@ -272,7 +272,7 @@ export default function ProjectDetailsPage() {
                       >
                         <Image
                           src={img}
-                          alt={`${project.title} image ${index+1}`}
+                          alt={`${project.title} image ${index + 1}`}
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
                           style={{ objectFit: "cover" }}
@@ -284,17 +284,15 @@ export default function ProjectDetailsPage() {
 
                 <div className="mt-6 mb-10">
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    {images
-                      .slice(0, 4)
-                      .map((img, index) => (
-                        <div className="rounded-xl overflow-hidden" key={index}>
-                          <img
-                            src={img}
-                            alt={`${project.title} thumbnail ${index+1}`}
-                            className="aspect-square object-cover w-full h-full"
-                          />
-                        </div>
-                      ))}
+                    {images.slice(0, 4).map((img, index) => (
+                      <div className="rounded-xl overflow-hidden" key={index}>
+                        <img
+                          src={img}
+                          alt={`${project.title} thumbnail ${index + 1}`}
+                          className="aspect-square object-cover w-full h-full"
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -318,25 +316,33 @@ export default function ProjectDetailsPage() {
             {/*Info*/}
             <div className="order-1 md:order-last relative text-[#432907]">
               <div className="mb-5">
-                <h1 className="font-bold text-2xl mb-5">
-                  {project.title}
-                </h1>
+                <h1 className="font-bold text-2xl mb-5">{project.title}</h1>
 
                 <div className="bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[8px] max-w-[150px] mb-5" />
 
-                <p className="">
-                  {project.description}
-                </p>
+                <p className="">{project.description}</p>
               </div>
 
               {/*Bond details*/}
               <div className="mb-5">
                 <h2 className="font-bold text-xl mb-2">Project details</h2>
                 <ul className="list-disc pl-7">
-                  <li>Investment Goal: ${Number(project.investment_goal).toLocaleString()}</li>
-                  <li>Current Investment: ${Number(project.investment_received).toLocaleString()}</li>
+                  <li>
+                    Investment Goal: $
+                    {Number(project.investment_goal).toLocaleString()}
+                  </li>
+                  <li>
+                    Current Investment: $
+                    {Number(project.investment_received).toLocaleString()}
+                  </li>
                   <li>Progress: {percent}% funded</li>
-                  <li>Status: {project.status ? project.status.charAt(0).toUpperCase() + project.status.slice(1) : 'Active'}</li>
+                  <li>
+                    Status:{" "}
+                    {project.status
+                      ? project.status.charAt(0).toUpperCase() +
+                        project.status.slice(1)
+                      : "Active"}
+                  </li>
                   <li>Created: {formattedDate}</li>
                 </ul>
               </div>
@@ -345,29 +351,30 @@ export default function ProjectDetailsPage() {
               <div className="mb-8">
                 <h2 className="font-bold text-xl mb-2">Project Verification</h2>
                 <ul className="list-disc pl-7">
-                  <li>
-                    Verified through Renovest UA platform
-                  </li>
-                  <li>
-                    Full transparency through platform reporting
-                  </li>
+                  <li>Verified through Renovest UA platform</li>
+                  <li>Full transparency through platform reporting</li>
                 </ul>
               </div>
 
               <div className="flex gap-5 flex-wrap">
                 <ProjectReportsButton projectId={project.id} />
-                <button 
+                <button
                   onClick={() => setIsInvestModalOpen(true)}
                   className="bg-[#0088FF] px-6 py-2 text-white rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
                 >
                   Invest now
+                </button>
+
+                <button className="flex items-center gap-2 bg-gradient-to-r from-[#0088FF] to-[#8e0dab] px-6 py-2 text-white rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
+                  <Wand />
+                  Risk Analysis
                 </button>
               </div>
             </div>
           </div>
         </div>
       </section>
-      
+
       <section className="bg-black py-12">
         <div className="max-w-5xl mx-auto px-5 box-border">
           <div className="flex justify-center mb-10">
@@ -396,10 +403,10 @@ export default function ProjectDetailsPage() {
           </div>
         </div>
       </section>
-      
+
       <div className="bg-white pt-10 pb-2 px-5">
         <div className="flex justify-center mb-20">
-          <button 
+          <button
             onClick={() => setIsInvestModalOpen(true)}
             className="bg-[#0088FF] text-white px-6 md:px-12 py-2.5 font-bold text-lg md:text-2xl rounded-full hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer"
           >
@@ -409,7 +416,7 @@ export default function ProjectDetailsPage() {
 
         <div className="max-w-[700px] mx-auto bg-gradient-to-r from-[#0088FF] to-[#C6FF80] h-[4px]" />
       </div>
-      
+
       {/* Investment Modal */}
       <InvestmentModal
         projectId={project.id}
