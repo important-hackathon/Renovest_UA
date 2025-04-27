@@ -10,6 +10,7 @@ import Image from "next/image";
 import { SwiperSlide } from "swiper/react";
 import { stages } from "./stages";
 import InvestmentModal from "@/components/investments/InvestmentsModal";
+import ProjectReportsButton from "@/components/projects/ProjectReportsButton";
 
 export default function ProjectDetailsPage() {
   const router = useRouter();
@@ -166,7 +167,7 @@ export default function ProjectDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center h-auto">
         <div className="animate-pulse flex flex-col gap-4 w-full max-w-3xl">
           <div className="bg-gray-200 h-64 w-full rounded-lg"></div>
           <div className="h-8 bg-gray-200 rounded w-3/4"></div>
@@ -230,7 +231,7 @@ export default function ProjectDetailsPage() {
 
   return (
     <>
-      <section className="min-h-screen bg-white text-black py-12 mt-10">
+      <section className="h-auto bg-white text-black py-12 mt-10">
         <div className="max-w-7xl mx-auto px-5 box-border">
           <div className="mb-5">
             <button
@@ -242,7 +243,7 @@ export default function ProjectDetailsPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full h-full pb-120 md:pb-90 lg:pb-35 border-b-3 border-[#D7DDE7] items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full h-full pb-120 md:pb-90 lg:pb-35 border-[#D7DDE7] items-start">
             {/*Slider*/}
 
             {images.length !== 0 && (
@@ -354,9 +355,7 @@ export default function ProjectDetailsPage() {
               </div>
 
               <div className="flex gap-5 flex-wrap">
-                <button className="bg-[#C6FF80] px-6 py-2 text-black rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
-                  View reports
-                </button>
+                <ProjectReportsButton projectId={project.id} />
                 <button 
                   onClick={() => setIsInvestModalOpen(true)}
                   className="bg-[#0088FF] px-6 py-2 text-white rounded-full font-bold text-base md:text-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
