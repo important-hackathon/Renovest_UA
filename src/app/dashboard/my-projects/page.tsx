@@ -68,12 +68,24 @@ export default function MyProjectsPage() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">My Projects</h1>
           
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition"
-          >
-            Back to Dashboard
-          </button>
+          <div className="flex gap-3">
+            <Link
+              href="/dashboard/new-project"
+              className="bg-[#C6FF80] hover:bg-[#b5ff60] text-black px-5 py-2 rounded-md font-medium transition flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Add Project
+            </Link>
+            
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition"
+            >
+              Back to Dashboard
+            </button>
+          </div>
         </div>
 
         {projects.length === 0 ? (
