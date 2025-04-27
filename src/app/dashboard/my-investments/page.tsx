@@ -15,14 +15,6 @@ interface ProjectData {
   image_url?: string;
 }
 
-interface RawInvestmentData {
-  id: string;
-  amount: number;
-  created_at: string;
-  project_id: string;
-  projects: ProjectData[] | null;
-}
-
 interface Investment {
   id: string;
   amount: number;
@@ -49,61 +41,64 @@ export default function MyInvestmentsPage() {
           return;
         }
 
-        // Using correct join syntax based on your DB structure
-        const { data, error } = await supabase
+        // First, fetch the user's investments
+        const { data: investmentsData, error: investmentsError } = await supabase
           .from("investments")
-          .select(
-            `
-            id,
-            amount,
-            created_at,
-            project_id,
-            projects:project_id(
-              id, 
-              title, 
-              description, 
-              investment_goal, 
-              investment_received, 
-              image_url
-            )
-          `
-          )
+          .select("*")
           .eq("investor_id", user.id)
           .order("created_at", { ascending: false });
 
-        if (error) {
-          console.error("Error fetching investments:", error);
+        if (investmentsError) {
+          console.error("Error fetching investments:", investmentsError);
           setLoading(false);
           return;
         }
 
-        console.log("Raw investment data:", data);
-
-        if (data && data.length > 0) {
-          // Transform the data to match our Investment interface
-          const transformedData: Investment[] = data.map(
-            (item: RawInvestmentData) => ({
-              id: item.id,
-              amount: item.amount,
-              created_at: item.created_at,
-              project_id: item.project_id,
-              // Extract the first project if it exists
-              project: item?.projects ? item.projects[0] : undefined,
-            })
-          );
-
-          setInvestments(transformedData);
-
-          // Calculate total invested
-          const total = transformedData.reduce(
-            (sum, inv) => sum + Number(inv.amount),
-            0
-          );
-          setTotalInvested(total);
-        } else {
+        if (!investmentsData || investmentsData.length === 0) {
           setInvestments([]);
           setTotalInvested(0);
+          setLoading(false);
+          return;
         }
+
+        // Extract project IDs from investments
+        const projectIds = investmentsData.map(inv => inv.project_id);
+
+        // Then fetch all related projects in a single query
+        const { data: projectsData, error: projectsError } = await supabase
+          .from("projects")
+          .select("*")
+          .in("id", projectIds);
+
+        if (projectsError) {
+          console.error("Error fetching projects:", projectsError);
+        }
+
+        // Create a map of projects by ID for easy lookup
+        const projectsMap = new Map();
+        if (projectsData) {
+          projectsData.forEach(project => {
+            projectsMap.set(project.id, project);
+          });
+        }
+
+        // Combine investments with their related projects
+        const combinedData = investmentsData.map(investment => {
+          const project = projectsMap.get(investment.project_id);
+          return {
+            ...investment,
+            project: project || undefined
+          };
+        });
+
+        setInvestments(combinedData);
+
+        // Calculate total invested
+        const total = combinedData.reduce(
+          (sum, inv) => sum + Number(inv.amount),
+          0
+        );
+        setTotalInvested(total);
       } catch (err) {
         console.error("Failed to fetch investments:", err);
       } finally {
@@ -169,7 +164,7 @@ export default function MyInvestmentsPage() {
                       <Image
                         src={project.image_url}
                         alt={project.title || "Project"}
-                        layout="fill"
+                        fill
                         className="object-cover rounded-t-lg"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
