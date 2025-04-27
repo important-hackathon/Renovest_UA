@@ -65,7 +65,7 @@ export default function ProjectCard({ id, image, title, description, raised, per
                 <div className="flex flex-col justify-center sm:flex-row gap-3 mt-auto">
                     <Link
                         href={`/projects/${id}`}
-                        className="w-3/4 bg-[#C6FF80] text-black font-semibold text-sm py-2 px-12 mb-2 mt-1 rounded-full hover:bg-[#B5E674] transition-colors text-center"
+                        className="w-3/4 mx-auto bg-[#C6FF80] text-black font-semibold text-sm py-2 px-12 mb-2 mt-1 rounded-full hover:bg-[#B5E674] transition-colors text-center"
                     >
                         View Details
                     </Link>

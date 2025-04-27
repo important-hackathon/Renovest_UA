@@ -57,7 +57,7 @@ export default function LoginPage() {
                 <h1 className="text-3xl font-bold text-center text-black">LOG IN INTO YOUR ACCOUNT</h1>
 
                 <div className="flex flex-col gap-6 items-center">
-                    <div className="flex flex-col gap-2 w-1/2">
+                    <div className="flex flex-col gap-2 w-full sm:w-1/2">
                         <label className="text-black text-center">Email</label>
                         <input
                             type="email"
@@ -68,7 +68,7 @@ export default function LoginPage() {
                             className="w-full border border-lime-300 rounded-full px-5 py-2 focus:outline-none bg-white"
                         />
                     </div>
-                    <div className="flex flex-col gap-2 w-1/2">
+                    <div className="flex flex-col gap-2 w-full sm:w-1/2">
                         <label className="text-black text-center">Password</label>
                         <input
                             type="password"
